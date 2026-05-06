@@ -4,6 +4,7 @@ from domain.models import User
 from implementation.hashing import HashingService
 from interface.persistence.user_repository import UserRepository
 from interface.use_case.model.base_response import BaseResponse
+from interface.use_case.model.role import CreateRoleResponse
 from interface.use_case.model.user import CreateUser, UserResponse, GetResponse, GetByEmail, GetByEmailResponse, \
     ListUserResponse
 from interface.use_case.user_service import UserService as DefaultUserService
@@ -78,7 +79,7 @@ class UserService(DefaultUserService):
             return response
 
         self._logger.info(f"User with {email.email} retrived successfully")
-        response = GetByEmailResponse(status=True, message="Successfully retrieved user", id=user_exist.id, email=user_exist.email, username=user_exist.username)
+        response = GetByEmailResponse(status=True, message="Successfully retrieved user", id=user_exist.id, email=user_exist.email, username=user_exist.username, roles=[CreateRoleResponse(id=role.id,name=role.name, status=True ) for role in user_exist.roles])
         response._status_code = "201"
         return response
 

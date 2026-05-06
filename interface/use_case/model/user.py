@@ -3,6 +3,7 @@ from typing import Optional, List
 from pydantic import BaseModel, EmailStr, UUID4
 
 from interface.use_case.model.base_response import BaseResponse
+from interface.use_case.model.role import CreateRoleResponse
 
 
 class CreateUser(BaseModel):
@@ -34,6 +35,7 @@ class GetByEmailResponse(BaseResponse):
     id: UUID4
     email: EmailStr
     username: str
+    roles: List[CreateRoleResponse]
 
 class ListUserResponse(BaseResponse):
     users: List[UserResponse]
