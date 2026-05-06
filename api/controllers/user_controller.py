@@ -21,7 +21,7 @@ async def create(request: CreateUser):
     return response
 
 @router.get("/filter", response_model=GetByEmailResponse)
-async def get_by_email_public(email: str = Query(..., description="Email of the user to fetch")):
+async def get_by_email(email: str = Query(..., description="Email of the user to fetch")):
     user_service = container.user_service()
     response = await user_service.get_by_email(email)
     if not response.status:
@@ -29,7 +29,7 @@ async def get_by_email_public(email: str = Query(..., description="Email of the 
     return response
 
 @router.get("/list-all", response_model=ListUserResponse)
-async def list_public():
+async def list():
     # Anyone can see the list! No token needed.
     user_service = container.user_service()
     response = await user_service.list()
@@ -38,7 +38,7 @@ async def list_public():
     return response
 
 @router.get("/{id}", response_model=GetResponse)
-async def get_public(id: UUID):
+async def get(id: UUID):
     user_service = container.user_service()
     response = await user_service.get(id)
     if not response.status:

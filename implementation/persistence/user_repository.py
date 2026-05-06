@@ -37,7 +37,7 @@ class UserRepository(DefaultUserRepository):
                     .where(User.id == str(id))
                 )
                 result = await session.execute(statement)
-                user = result.scalars().one_or_none()
+                user = result.unique().scalars().one_or_none()
                 return user
             except Exception as e:
                 self._logger.error(f"an error occurred while getting user {id}, {e}")
@@ -79,7 +79,7 @@ class UserRepository(DefaultUserRepository):
                     .where(User.email == email)
                 )
                 result = await session.execute(statement)
-                user = result.unique.scalars().one_or_none()
+                user = result.unique().scalars().one_or_none()
                 return user
             except Exception as e:
                 self._logger.error(f"an error occurred while getting user {email}, {e}")
@@ -102,7 +102,7 @@ class UserRepository(DefaultUserRepository):
                     select(User).options(joinedload(User.roles)).where(User.id == str(user_id))
                 )
                 result_user = await session.execute(statement_user)
-                user = result_user.scalars().one_or_none()
+                user = result_user.unique().scalars().one_or_none()
 
                 statement_role = (
                     select(Role).where(Role.id == str(role_id))

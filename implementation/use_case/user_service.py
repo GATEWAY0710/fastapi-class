@@ -70,15 +70,15 @@ class UserService(DefaultUserService):
         return response
 
 
-    async def get_by_email(self, email: GetByEmail) -> BaseResponse:
-        user_exist = await self._user_repository.get_by_email(email=email.email)
+    async def get_by_email(self, email: str) -> BaseResponse:
+        user_exist = await self._user_repository.get_by_email(email=email)
         if not user_exist:
-            self._logger.warning(f"User with {email.email} does not exist")
+            self._logger.warning(f"User with {email} does not exist")
             response = BaseResponse(status=False, message="User does not exist")
             response._status_code = 400
             return response
 
-        self._logger.info(f"User with {email.email} retrived successfully")
+        self._logger.info(f"User with {email} retrived successfully")
         response = GetByEmailResponse(status=True, message="Successfully retrieved user", id=user_exist.id, email=user_exist.email, username=user_exist.username, roles=[CreateRoleResponse(id=role.id,name=role.name, status=True ) for role in user_exist.roles])
         response._status_code = 201
         return response
