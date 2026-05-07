@@ -20,30 +20,30 @@ class RoleService(DefaultRoleService):
         if role_exist:
             self._logger.warning(f"role {role.name} already exists ")
             response = BaseResponse(status= False, message= f"role {role.name} already exists")
-            response._status_code = "400"
+            response._status_code = 400
             return response
         db_role = Role(name=role.name, description=role.description)
         db_role = await self._role_repository.create(db_role)
         if not db_role:
             self._logger.error(f"error creating role {role.name}")
             response = BaseResponse(status= False, message= f"error creating role {role.name}")
-            response._status_code = "500"
+            response._status_code = 500
             return response
         self._logger.info(f"role {role.name} created")
         response = CreateRoleResponse(status=True, message= f"role {role.name} created", id=db_role.id, name=db_role.name)
-        response._status_code = "200"
+        response._status_code = 200
         return response
 
-    async  def get(self, role: Get) -> BaseResponse:
-        role_exist = await self._role_repository.get(name=role.name)
+    async  def get(self, name: str) -> BaseResponse:
+        role_exist = await self._role_repository.get(name=name)
         if not role_exist:
-            self._logger.warning(f"role {role.name} does not exist")
-            response = BaseResponse(status= False, message= f"role {role.name} does not exist")
-            response._status_code = "400"
+            self._logger.warning(f"role {name} does not exist")
+            response = BaseResponse(status= False, message= f"role {name} does not exist")
+            response._status_code = 400
             return response
-        self._logger.info(f"role {role.name} found")
-        response = GetResponse(status=True, message= f"role {role.name} found", id=role_exist.id, name=role_exist.name, description=role_exist.description)
-        response._status_code = "200"
+        self._logger.info(f"role {name} found")
+        response = GetResponse(status=True, message= f"role {name} found", id=role_exist.id, name=role_exist.name, description=role_exist.description)
+        response._status_code = 200
         return response
 
     async def list(self) -> BaseResponse:
@@ -54,5 +54,5 @@ class RoleService(DefaultRoleService):
         ]
         self._logger.info(f"role list")
         response = ListResponse(status=True, message= f"role list", roles=role_responses)
-        response._status_code = "200"
+        response._status_code = 200
         return response

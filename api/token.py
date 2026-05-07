@@ -48,7 +48,7 @@ async def get_current_user(auth: Annotated[HTTPAuthorizationCredentials, Depends
         raise credentials_exception
 
     user_service = container.user_service()
-    response = await user_service.get_user_by_email(email=token_data.user_id)
+    response = await user_service.get_by_email(email=token_data.email)
     if not response.status:
         raise credentials_exception
 

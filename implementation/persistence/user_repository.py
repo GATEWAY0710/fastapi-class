@@ -111,12 +111,15 @@ class UserRepository(DefaultUserRepository):
                 role = result_role.scalars().one_or_none()
 
                 if not user or not role:
-                    self._logger.error(f"either user with id {user_id} or role with id {role_id} does not exist")
+                    self._logger.error(f"Either user with id {user_id} or role with id {role_id} does not exist")
+                    return None
+
+                if role not in user.roles:
                     user.roles.append(role)
                     await session.commit()
                     await session.refresh(user)
-                    return user
+                return user
             except Exception as e:
                 await session.rollback()
-                self._logger.error(f"an error occurred while assigning role to user {user_id}, {e}")
+                self._logger.error(f"Error assigning role, {e}")
                 return None

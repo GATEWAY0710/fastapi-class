@@ -12,6 +12,9 @@ from interface.use_case.model.role import Get
 class RoleRepository(DefaultRoleRepository):
     _logger: Logger
 
+    def __init__(self, logger: Logger):
+        self._logger = logger
+
     async def create(self, role: Role) -> Optional[Role]:
         async with AsyncSessionLocal() as session:
             try:
